@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en" data-feat-layout="cards">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Synapt — Search and move files across your own devices</title>
+<meta name="description" content="Synapt is a hotkey launcher that searches your files and your paired devices, and transfers between them directly over the LAN. SynaptClip adds clipboard history and cross-device clip sync. No cloud, no accounts, end-to-end encrypted, open source." />
+<link rel="icon" href="assets/synapt-logo.svg" type="image/svg+xml" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500;600;700&family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="synapt.css" />
+</head>
+<body data-herogrid="on">
+
+<!-- ============ NAV ============ -->
+<nav class="nav" data-screen-label="nav">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Synapt home">
+      <img src="assets/synapt-logo.svg" alt="Synapt logo" />
+      <b>Synapt</b>
+    </a>
+    <div class="nav-links">
+      <a href="#what">Overview</a>
+      <a href="#synapt">Synapt</a>
+      <a href="#clip">SynaptClip</a>
+      <a href="#platforms">Platforms</a>
+      <span class="sep"></span>
+      <a class="btn btn-ghost btn-sm" data-link="synapt" target="_blank" rel="noopener">
+        <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+        GitHub
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- ============ HERO ============ -->
+<header class="hero" id="top" data-screen-label="hero">
+  <div class="hero-grid" aria-hidden="true"></div>
+  <div class="wrap">
+    <h1 class="reveal" data-d="1">Search your whole network<br />like it's <span class="muted">one machine.</span></h1>
+    <p class="hero-sub reveal" data-d="2">Synapt is a hotkey launcher that searches your files, your apps, and the devices you've paired with — then moves what you find between them directly. Encrypted end-to-end, never touching a server. Built in Rust.</p>
+    <div class="hero-cta reveal" data-d="3">
+      <a class="btn btn-primary" href="#download">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M8 2v8m0 0 3-3m-3 3L5 7M2.5 12.5h11"/></svg>
+        Download
+      </a>
+      <a class="btn btn-ghost" data-link="synapt" target="_blank" rel="noopener">
+        <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+        View source
+      </a>
+    </div>
+    <div class="hero-meta reveal" data-d="4">
+      <span><b>Ctrl+Space</b> to summon</span>
+      <span><b>ChaCha20-Poly1305</b> encryption</span>
+      <span><b>X25519</b> key exchange</span>
+      <span><b>Zero</b> accounts</span>
+    </div>
+
+    <!-- Synapt overlay — recreation of the real app UI (src/pages/Overlay.tsx) -->
+    <div class="shot reveal" data-d="2">
+      <div class="app app-synapt" role="img" aria-label="Synapt overlay searching a paired device for a file">
+        <div class="app-head">
+          <div class="app-head-l">
+            <img src="assets/synapt-logo.svg" alt="" class="app-logo" />
+            <span class="app-name">Synapt</span>
+            <span class="app-sub">| SynaptClip <span class="app-sub-sm">connected</span></span>
+          </div>
+          <div class="app-head-r">
+            <span class="app-ico" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg>
+            </span>
+          </div>
+        </div>
+
+        <div class="app-search">
+          <span class="app-ico" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          </span>
+          <span class="app-chip">macbook-pro <span class="app-chip-x" aria-hidden="true">✕</span></span>
+          <span class="app-badge">Remote</span>
+          <span class="app-input">quarterly<span class="app-caret" aria-hidden="true"></span></span>
+        </div>
+
+        <div class="app-list">
+          <div class="app-row is-selected">
+            <span class="app-ico app-ico-file" aria-hidden="true">
+              <svg viewBox="0 0 16 16" width="16" height="16" fill="none"><path d="M4 2H9L12 5V14H4Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/><path d="M9 2V5H12" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>
+            </span>
+            <span class="app-row-txt">
+              <b>quarterly-report-2026.pdf</b>
+              <i>/home/aatish/Documents/reports</i>
+            </span>
+            <span class="app-tag app-tag-accent">macbook-pro</span>
+          </div>
+          <div class="app-row">
+            <span class="app-ico app-ico-file" aria-hidden="true">
+              <svg viewBox="0 0 16 16" width="16" height="16" fill="none"><path d="M4 2H9L12 5V14H4Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/><path d="M9 2V5H12" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>
+            </span>
+            <span class="app-row-txt">
+              <b>quarterly-notes.md</b>
+              <i>/home/aatish/Documents/reports</i>
+            </span>
+            <span class="app-tag app-tag-accent">macbook-pro</span>
+          </div>
+          <div class="app-row">
+            <span class="app-ico app-ico-file" aria-hidden="true">
+              <svg viewBox="0 0 16 16" width="16" height="16" fill="none"><path d="M2 4.5C2 3.7 2.7 3 3.5 3H6L7.5 4.5H12.5C13.3 4.5 14 5.2 14 6V11.5C14 12.3 13.3 13 12.5 13H3.5C2.7 13 2 12.3 2 11.5V4.5Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>
+            </span>
+            <span class="app-row-txt">
+              <b>quarterly</b>
+              <i>/home/aatish/Documents/reports/archive</i>
+            </span>
+            <span class="app-tag app-tag-accent">macbook-pro</span>
+          </div>
+          <div class="app-row">
+            <span class="app-ico app-ico-file" aria-hidden="true">
+              <svg viewBox="0 0 16 16" width="16" height="16" fill="none"><path d="M4 2H9L12 5V14H4Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/><path d="M9 2V5H12" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>
+            </span>
+            <span class="app-row-txt">
+              <b>q4-quarterly-deck.key</b>
+              <i>/home/aatish/Documents/reports</i>
+            </span>
+            <span class="app-tag app-tag-accent">macbook-pro</span>
+          </div>
+        </div>
+      </div>
+      <p class="shot-cap mono">Synapt overlay · remote search on a paired device</p>
+    </div>
+  </div>
+</header>
+
+<!-- ============ WHAT IS ============ -->
+<section class="section-pad" id="what" data-screen-label="overview">
+  <div class="rail-anchor" aria-hidden="true"><span class="rail-anchor-label">Overview</span></div>
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">What is Synapt</span>
+      <p>Synapt and SynaptClip are independent desktop apps that share one idea: your data should move between your own devices without a middleman. Use either alone, or run both for a connected workspace.</p>
+    </div>
+
+    <div class="duo">
+      <div class="duo-card reveal">
+        <span class="kind">Launcher &amp; file transfer</span>
+        <h3>Synapt</h3>
+        <p>Hit a global hotkey, search your files and apps instantly, or point the same query at a paired device and pull a file straight off it. Discovery is automatic, transfers are encrypted, nothing leaves the LAN.</p>
+        <a class="link-arrow" href="#synapt">Explore Synapt
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 7h8M7.5 3.5 11 7l-3.5 3.5"/></svg>
+        </a>
+      </div>
+      <div class="duo-card reveal" data-d="1">
+        <span class="kind">Clipboard manager</span>
+        <h3>SynaptClip</h3>
+        <p>Captures clipboard history locally with fast fuzzy search, pinning and auto-categorisation. When Synapt is running, clips can sync to any trusted device on the network — still without touching the cloud.</p>
+        <a class="link-arrow" href="#clip">Explore SynaptClip
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 7h8M7.5 3.5 11 7l-3.5 3.5"/></svg>
+        </a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<hr class="rule wrap" style="max-width:var(--maxw);" />
+
+<!-- ============ SYNAPT FEATURES ============ -->
+<section class="section-pad feature-block" id="synapt" data-screen-label="synapt-features">
+  <div class="rail-anchor" aria-hidden="true"><span class="rail-anchor-label">Synapt</span></div>
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">Synapt</span>
+      <h2>One prompt for your files, your apps, and your other machines.</h2>
+      <p>Everything happens on the LAN. Indexing, discovery, pairing, encryption and transfer are handled directly between devices.</p>
+    </div>
+
+    <div class="feat-grid">
+      <div class="feat reveal">
+        <h4>Global hotkey overlay</h4>
+        <p>Ctrl+Space summons a transparent, always-on-top launcher over whatever you're doing. Escape dismisses it. It never takes a slot in your dock or taskbar.</p>
+      </div>
+      <div class="feat reveal" data-d="1">
+        <h4>Search that tolerates typos</h4>
+        <p>Queries run through a Bloom filter pre-check, a frequency-weighted prefix Trie, a tantivy full-text index, then a Jaro-Winkler and Levenshtein fuzzy fallback.</p>
+      </div>
+      <div class="feat reveal" data-d="2">
+        <h4>Search across your peers</h4>
+        <p>Type <span class="mono kbd">@device</span> and the same query runs on that machine's shared folders, results tagged with the device name. Enter pulls the file down.</p>
+      </div>
+      <div class="feat reveal">
+        <h4>Trust once, remembered</h4>
+        <p>Pairing runs an X25519 exchange and shows a verification code on both screens. Match them once and the long-term keys are stored — every transfer after that is silent.</p>
+      </div>
+      <div class="feat reveal" data-d="1">
+        <h4>Encrypted, shared on your terms</h4>
+        <p>Transfers are sealed with ChaCha20-Poly1305, and peers only ever see the directories on your explicit shared allow-list. Nothing else is reachable.</p>
+      </div>
+      <div class="feat reveal" data-d="2">
+        <h4>Input modes, not menus</h4>
+        <p><span class="mono kbd">/</span> for folders, <span class="mono kbd">@</span> for a device, <span class="mono kbd">@settings</span> to configure, an arrow key for per-file actions, and plain arithmetic for an inline calculator.</p>
+      </div>
+    </div>
+
+    <div class="feat-tech reveal">
+      <span class="chip-label">Built with</span>
+      <span class="chip">Rust</span>
+      <span class="chip">Tauri v2</span>
+      <span class="chip">React</span>
+      <span class="chip">TypeScript</span>
+      <span class="chip">SQLite</span>
+      <span class="chip">tantivy</span>
+      <span class="chip">ChaCha20-Poly1305</span>
+    </div>
+  </div>
+</section>
+
+<hr class="rule wrap" style="max-width:var(--maxw);" />
+
+<!-- ============ SYNAPTCLIP FEATURES ============ -->
+<section class="section-pad feature-block" id="clip" data-screen-label="clip-features">
+  <div class="rail-anchor" aria-hidden="true"><span class="rail-anchor-label">SynaptClip</span></div>
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">SynaptClip</span>
+      <h2>A clipboard with a memory — and a network.</h2>
+      <p>Local-first clipboard history with fast search built in. Optional sync rides on Synapt's encrypted connection when it's available.</p>
+    </div>
+
+    <!-- SynaptClip panel — recreation of the real app UI (src/components/Panel.tsx) -->
+    <div class="shot shot-inline reveal">
+      <div class="app app-clip" role="img" aria-label="SynaptClip panel showing clipboard history and a paired device">
+        <div class="app-head">
+          <div class="app-head-l">
+            <img src="assets/synapt-logo.svg" alt="" class="app-logo" />
+            <span class="app-name">SynaptClip</span>
+            <span class="app-sub" data-role="v-clip-bare"></span>
+          </div>
+          <div class="app-head-r">
+            <span class="app-ico" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 14 4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/></svg>
+            </span>
+            <span class="app-ico" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 11 3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+            </span>
+            <span class="app-ico" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg>
+            </span>
+            <span class="app-ico" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg>
+            </span>
+          </div>
+        </div>
+
+        <div class="app-search">
+          <span class="app-ico" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          </span>
+          <span class="app-input is-placeholder">Search clips...</span>
+        </div>
+
+        <div class="app-tabs">
+          <span class="app-tab is-active">All</span>
+          <span class="app-tab">Pinned</span>
+          <span class="app-tab">Groups</span>
+          <span class="app-tab">Link <i class="app-auto">auto</i></span>
+          <span class="app-tab">Code <i class="app-auto">auto</i></span>
+        </div>
+
+        <div class="app-devices">
+          <div class="app-devices-h">Devices</div>
+          <div class="app-peer">
+            <span class="app-peer-l"><i class="app-dot"></i>fedora-desktop</span>
+            <span class="app-send">Send clipboard</span>
+          </div>
+        </div>
+
+        <div class="app-list">
+          <div class="app-clip-row">
+            <span class="app-clip-body">
+              <span class="app-clip-txt mono">cargo tauri build --target universal-apple-darwin</span>
+              <span class="app-clip-meta"><span class="app-tag">Code</span></span>
+            </span>
+            <span class="app-clip-r">
+              <span class="app-pin" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 17v5M9 10.76V6a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v4.76a2 2 0 0 0 .59 1.42L17 13.5V17H7v-3.5l1.41-1.32A2 2 0 0 0 9 10.76Z"/></svg>
+              </span>
+              <span class="app-time">2m</span>
+              <span class="app-ico" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              </span>
+            </span>
+          </div>
+          <div class="app-clip-row is-hover">
+            <span class="app-clip-body">
+              <span class="app-clip-txt mono" data-link-text="synapt:releases"></span>
+              <span class="app-clip-meta">
+                <span class="app-from"><i class="app-bar"></i>From macbook-pro</span>
+                <span class="app-tag">Link</span>
+              </span>
+            </span>
+            <span class="app-clip-r">
+              <span class="app-time">14m</span>
+              <span class="app-ico" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              </span>
+            </span>
+          </div>
+          <div class="app-clip-row">
+            <span class="app-clip-body">
+              <span class="app-clip-txt mono">ChaCha20-Poly1305 with X25519 key exchange</span>
+              <span class="app-clip-meta"><span class="app-tag app-tag-accent">notes</span></span>
+            </span>
+            <span class="app-clip-r">
+              <span class="app-time">1h</span>
+              <span class="app-ico" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              </span>
+            </span>
+          </div>
+          <div class="app-clip-row">
+            <span class="app-clip-body">
+              <span class="app-clip-txt mono">~/Documents/reports/quarterly-report-2026.pdf</span>
+              <span class="app-clip-meta"><span class="app-tag">File Path</span></span>
+            </span>
+            <span class="app-clip-r">
+              <span class="app-time">3h</span>
+              <span class="app-ico" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              </span>
+            </span>
+          </div>
+        </div>
+      </div>
+      <p class="shot-cap mono">SynaptClip panel · history, auto-categories and a paired device</p>
+    </div>
+
+    <div class="feat-grid">
+      <div class="feat reveal">
+        <h4>Full clipboard history</h4>
+        <p>Everything you copy is captured and stored locally in SQLite, so a stray Ctrl+C never loses what you had before.</p>
+      </div>
+      <div class="feat reveal" data-d="1">
+        <h4>Instant fuzzy search</h4>
+        <p>A custom Trie plus a Levenshtein matcher finds the right clip as you type — forgiving of typos, fast over thousands of entries.</p>
+      </div>
+      <div class="feat reveal" data-d="2">
+        <h4>Auto-categorised</h4>
+        <p>Links, file paths, code, emails and colours are recognised and tagged on capture. Add your own categories and groups on top.</p>
+      </div>
+      <div class="feat reveal">
+        <h4>Pin &amp; auto-expire</h4>
+        <p>Keep the snippets you reach for pinned to the top, and set the rest to clear themselves after a chosen window so sensitive pastes don't linger.</p>
+      </div>
+      <div class="feat reveal" data-d="1">
+        <h4>Cross-device sync</h4>
+        <p>With Synapt running, send and receive clips to any trusted device on the network. Copy on one machine, paste on another.</p>
+      </div>
+      <div class="feat reveal" data-d="2">
+        <h4>Local by default</h4>
+        <p>Sync is opt-in and rides Synapt's encrypted LAN link. With Synapt off, SynaptClip is a purely offline, on-device tool.</p>
+      </div>
+    </div>
+
+    <div class="feat-tech reveal">
+      <span class="chip-label">Built with</span>
+      <span class="chip">Rust</span>
+      <span class="chip">Tauri v2</span>
+      <span class="chip">React</span>
+      <span class="chip">TypeScript</span>
+      <span class="chip">SQLite</span>
+      <span class="chip">Trie + Levenshtein</span>
+    </div>
+  </div>
+</section>
+
+<hr class="rule wrap" style="max-width:var(--maxw);" />
+
+<!-- ============ PLATFORMS ============ -->
+<section class="section-pad" id="platforms" data-screen-label="platforms">
+  <div class="rail-anchor" aria-hidden="true"><span class="rail-anchor-label">Platforms</span></div>
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">Platform support</span>
+      <h2>Native on all three.</h2>
+      <p>Synapt and SynaptClip build from the same release pipeline, so a tagged release produces installers for every platform below at once — no app lags behind another.</p>
+    </div>
+
+    <div class="pgrid reveal">
+      <div class="pcard">
+        <div class="pcard-head">
+          <svg class="pico" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M10 2.4c-.95 0-1.7.9-1.7 2.1 0 .55.14 1.03.36 1.42-.5.2-.86.6-.86 1.18 0 .3.1.56.27.78-1.1.5-1.87 1.7-1.87 3.1 0 .5.09.96.26 1.38-.42.32-.68.79-.68 1.32 0 1.02.96 1.85 2.4 2.16.05.56.53 1 1.12 1h1.4c.6 0 1.07-.44 1.12-1 1.44-.3 2.4-1.14 2.4-2.16 0-.53-.26-1-.68-1.32.17-.42.26-.88.26-1.38 0-1.4-.76-2.6-1.87-3.1.17-.22.27-.48.27-.78 0-.58-.36-.98-.86-1.18.22-.4.36-.87.36-1.42 0-1.2-.75-2.1-1.7-2.1Z"/><circle cx="8.7" cy="9.3" r=".55" fill="var(--bg)"/><circle cx="11.3" cy="9.3" r=".55" fill="var(--bg)"/><path d="M9.3 10.6h1.4l-.7.9-.7-.9Z" fill="var(--bg)"/><path d="M7.6 16.4c-.3.5-.9 1.1-1.6 1.2M12.4 16.4c.3.5.9 1.1 1.6 1.2" fill="none" stroke="currentColor" stroke-width="0.9" stroke-linecap="square"/></svg>
+          <h4>Linux</h4>
+        </div>
+        <dl class="pspec">
+          <div><dt>Architecture</dt><dd>x86_64</dd></div>
+          <div><dt>Packages</dt><dd><span class="kbd">.AppImage</span> <span class="kbd">.deb</span> <span class="kbd">.rpm</span></dd></div>
+          <div><dt>Display server</dt><dd>X11, Wayland — GNOME and wlroots</dd></div>
+        </dl>
+      </div>
+
+      <div class="pcard">
+        <div class="pcard-head">
+          <svg class="pico" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M3 4.5 9 3.6V9.5H3V4.5ZM3 10.5h6v5.9L3 15.5v-5ZM10 3.4 17 2.4v7.1h-7V3.4ZM10 10.5h7v7.1l-7-1v-6.1Z"/></svg>
+          <h4>Windows</h4>
+        </div>
+        <dl class="pspec">
+          <div><dt>Architecture</dt><dd>x86_64</dd></div>
+          <div><dt>Packages</dt><dd><span class="kbd">.msi</span> <span class="kbd">.exe</span> NSIS installer</dd></div>
+          <div><dt>Requires</dt><dd>Windows 10 or 11</dd></div>
+        </dl>
+      </div>
+
+      <div class="pcard">
+        <div class="pcard-head">
+          <svg class="pico" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M13.5 10.6c0-1.8 1.5-2.7 1.5-2.7-.8-1.2-2.1-1.3-2.5-1.4-1.1-.1-2.1.6-2.6.6-.5 0-1.4-.6-2.3-.6-1.2 0-2.3.7-2.9 1.8-1.2 2.2-.3 5.4.9 7.2.6.9 1.3 1.9 2.2 1.8.9 0 1.2-.6 2.3-.6 1 0 1.4.6 2.3.5.9 0 1.6-.9 2.2-1.8.4-.6.6-1 .9-1.7-1.8-.7-2.2-3.1-1.9-3ZM12 5.3c.5-.6.8-1.4.7-2.3-.7 0-1.5.5-2 1.1-.4.5-.8 1.3-.7 2.1.8.1 1.5-.4 2-.9Z"/></svg>
+          <h4>macOS</h4>
+        </div>
+        <dl class="pspec">
+          <div><dt>Architecture</dt><dd>Universal — <span class="kbd">arm64</span> <span class="kbd">x86_64</span> in one binary</dd></div>
+          <div><dt>Packages</dt><dd><span class="kbd">.dmg</span> <span class="kbd">.app</span></dd></div>
+          <div><dt>Signing</dt><dd>Developer ID signed and notarised — no Gatekeeper warning</dd></div>
+        </dl>
+      </div>
+    </div>
+
+    <p class="ptable-note mono">Linux and Windows ship x86_64 only for now — arm64 runners aren't in the release matrix yet. macOS is the one universal build.</p>
+  </div>
+</section>
+
+<!-- ============ OPEN SOURCE CTA ============ -->
+<section class="section-pad-sm" id="download" data-screen-label="open-source">
+  <div class="rail-anchor" aria-hidden="true"><span class="rail-anchor-label">Install</span></div>
+  <div class="oss reveal">
+    <div class="wrap">
+      <span class="eyebrow" style="justify-content:center;">Install</span>
+      <h2 style="margin-top:20px;">Get it running.</h2>
+      <p>Both apps are MIT licensed and fully open source. Grab an installer for your platform, or read the source and build it yourself. No telemetry, no accounts, nothing hidden.</p>
+
+      <div class="install" id="installer" data-app="synapt" data-os="mac">
+        <div class="install-row">
+          <div class="install-col">
+            <span class="mono install-os-caption">App</span>
+            <div class="seg" data-role="app-toggle">
+              <button type="button" class="seg-btn" data-app-value="synapt">Synapt</button>
+              <button type="button" class="seg-btn" data-app-value="synaptclip">SynaptClip</button>
+            </div>
+          </div>
+          <div class="install-col install-col-end">
+            <span class="mono install-os-caption">Different OS? <span class="install-detected">Detected <b data-role="os-label">macOS</b></span></span>
+            <div class="seg os-picker" data-role="os-picker">
+              <button type="button" class="seg-btn" data-os-value="linux">Linux</button>
+              <button type="button" class="seg-btn" data-os-value="mac">macOS</button>
+              <button type="button" class="seg-btn" data-os-value="windows">Windows</button>
+            </div>
+          </div>
+        </div>
+        <div class="cmd">
+          <div class="cmd-head">
+            <span class="mono" data-role="cmd-label">macOS</span>
+            <button class="copy" type="button" data-role="copy-btn" data-cmd="">Copy link</button>
+          </div>
+          <code class="mono" data-role="cmd-text">Resolving latest release…</code>
+        </div>
+        <div class="install-actions">
+          <a class="btn btn-primary" data-role="dl-btn" data-link="synapt:latest" target="_blank" rel="noopener">
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M8 2v8m0 0 3-3m-3 3L5 7M2.5 12.5h11"/></svg>
+            <span data-role="dl-label">Download</span>
+          </a>
+          <a class="btn btn-ghost" data-role="all-btn" data-link="synapt:latest" target="_blank" rel="noopener">All assets</a>
+        </div>
+      </div>
+
+      <div class="oss-cta">
+        <a class="btn btn-ghost" data-link="synapt" target="_blank" rel="noopener">
+          <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+          Synapt repo
+        </a>
+        <a class="btn btn-ghost" data-link="synaptclip" target="_blank" rel="noopener">
+          <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+          SynaptClip repo
+        </a>
+      </div>
+      <p class="license">MIT License · No telemetry · No accounts</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="footer" data-screen-label="footer">
+  <div class="bigmark" aria-hidden="true"><span>Synapt</span></div>
+  <div class="wrap">
+    <div>
+      <a class="brand" href="#top"><img src="assets/synapt-logo.svg" alt="" /><b>Synapt</b></a>
+      <p class="f-desc">A hotkey launcher for your files and your devices, plus a clipboard that follows you across them. Private by design.</p>
+    </div>
+    <div class="f-cols">
+      <div class="f-col">
+        <h5>Synapt</h5>
+        <a href="#synapt">Features</a>
+        <a href="#platforms">Platforms</a>
+        <a data-link="synapt" target="_blank" rel="noopener">GitHub</a>
+        <a data-link="synapt:releases" target="_blank" rel="noopener">Releases</a>
+      </div>
+      <div class="f-col">
+        <h5>SynaptClip</h5>
+        <a href="#clip">Features</a>
+        <a href="#platforms">Platforms</a>
+        <a data-link="synaptclip" target="_blank" rel="noopener">GitHub</a>
+        <a data-link="synaptclip:releases" target="_blank" rel="noopener">Releases</a>
+      </div>
+      <div class="f-col">
+        <h5>Project</h5>
+        <a href="#what">Overview</a>
+        <a data-link="synapt:license" target="_blank" rel="noopener">MIT License</a>
+        <a data-link="owner" target="_blank" rel="noopener">Maintainer</a>
+      </div>
+    </div>
+  </div>
+  <div class="wrap footer-base">
+    <span>© 2026 Aatish Bagal · synapt.aatish.io</span>
+    <span>Built in Rust · Tauri v2 · MIT</span>
+  </div>
+</footer>
+
+<!-- ============ AATISH.IO SIGNATURE ============
+     Ported from marblearch-showcase/components/BottomOverlay.tsx — the same
+     trigger, hover swap and card that appear on the other projects. GSAP is
+     replaced with CSS transitions; only the parallax needs script.
+     ============================================================ -->
+<div class="sig-trigger">
+  <button type="button" class="sig-link" data-role="sig-open" aria-haspopup="dialog" aria-expanded="false">
+    <img class="sig-icon" src="assets/atsh-symbol.svg" alt="" width="36" height="36" />
+    <span class="sr-only">About the developer</span>
+  </button>
+</div>
+
+<div class="sig-overlay" data-role="sig-overlay" role="dialog" aria-modal="true" aria-label="About the developer" aria-hidden="true">
+  <div class="sig-card" data-role="sig-card">
+    <div class="sig-card-inner">
+      <div class="sig-bg" data-role="sig-bg">
+        <img src="assets/atsh-card-bg.png" alt="" loading="lazy" decoding="async" />
+      </div>
+      <div class="sig-content" data-role="sig-content">
+        <span class="sig-label">About Developer</span>
+        <span class="sig-name">Aatish Bagal</span>
+        <div class="sig-divider" aria-hidden="true"></div>
+
+        <a class="sig-capsule" href="https://aatish.io" target="_blank" rel="noopener noreferrer">aatish.io</a>
+
+        <div class="sig-socials">
+          <a href="https://socials.aatish.io/github" target="_blank" rel="noopener noreferrer" class="sig-icon-link" title="GitHub" aria-label="GitHub">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+          </a>
+          <a href="https://socials.aatish.io/linkedin" target="_blank" rel="noopener noreferrer" class="sig-icon-link" title="LinkedIn" aria-label="LinkedIn">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          </a>
+        </div>
+
+        <button type="button" class="sig-close" data-role="sig-close">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="synapt.js"></script>
+
+</body>
+</html>
