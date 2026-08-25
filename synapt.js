@@ -17,7 +17,7 @@
       synapt: { repo: "synapt", name: "Synapt" },
       synaptclip: { repo: "synapt-clip", name: "SynaptClip" }
     },
-    /* Branch the LICENSE link points at. */
+    /* Branch the LICENSE and PRIVACY links point at. */
     defaultBranch: "main"
   };
 
@@ -40,6 +40,7 @@
     if (what === "releases") return base + "/releases";
     if (what === "latest") return base + "/releases/latest";
     if (what === "license") return base + "/blob/" + SITE.defaultBranch + "/LICENSE";
+    if (what === "privacy") return base + "/blob/" + SITE.defaultBranch + "/PRIVACY.md";
     return base;
   }
 
