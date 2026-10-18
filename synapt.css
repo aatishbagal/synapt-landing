@@ -726,6 +726,24 @@ section { position: relative; }
   margin-top: 20px;
 }
 
+/* What's new — latest releases from whatsnew.json, below the download buttons */
+.whatsnew { margin-top: 36px; border-style: solid; border-width: 1px 0; border-image: linear-gradient(to right, transparent, var(--line) 12%, var(--line) 88%, transparent) 1; }
+.whatsnew[hidden] { display: none; }
+.whatsnew-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 11px 16px; border-bottom: 1px solid var(--line); }
+.whatsnew-head .mono { font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--fg-faint); }
+.whatsnew-all { font-family: var(--mono); font-size: 12px; color: var(--fg-dim); text-decoration: none; transition: color .2s; }
+.whatsnew-all:hover { color: var(--fg); }
+.whatsnew-list { list-style: none; }
+.whatsnew-item { padding: 18px 16px; }
+.whatsnew-item + .whatsnew-item { border-top: 1px solid var(--line); }
+.whatsnew-meta { display: flex; align-items: baseline; gap: 12px; }
+.whatsnew-version { font-family: var(--mono); font-size: 13px; color: var(--fg); }
+.whatsnew-date { font-family: var(--mono); font-size: 12px; color: var(--fg-faint); }
+.whatsnew-headline { margin-top: 6px; font-size: 14px; color: var(--fg-dim); }
+.whatsnew-points { margin-top: 10px; padding-left: 18px; display: flex; flex-direction: column; gap: 6px; }
+.whatsnew-points li { font-size: 14px; line-height: 1.5; color: var(--fg-dim); text-wrap: pretty; }
+.whatsnew-points li::marker { color: var(--fg-faint); }
+
 /* ============================================================
    AATISH.IO SIGNATURE
    Ported from marblearch-showcase/components/BottomOverlay.module.scss
