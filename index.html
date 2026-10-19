@@ -467,6 +467,17 @@
           </a>
           <a class="btn btn-ghost" data-role="all-btn" data-link="synapt:latest" target="_blank" rel="noopener">All assets</a>
         </div>
+
+        <!-- What's new: synapt.js fills this from whatsnew.json on each repo's
+             default branch, following the app picked above. Nothing here is
+             edited per release; it stays hidden if the file cannot be loaded. -->
+        <div class="whatsnew" data-role="whatsnew" hidden>
+          <div class="whatsnew-head">
+            <span class="mono">What's new</span>
+            <a class="whatsnew-all" data-role="changelog-link" data-link="synapt:changelog" target="_blank" rel="noopener">Full changelog</a>
+          </div>
+          <ol class="whatsnew-list" data-role="whatsnew-list"></ol>
+        </div>
       </div>
 
       <div class="oss-cta">
@@ -524,8 +535,8 @@
 </footer>
 
 <!-- ============ AATISH.IO SIGNATURE ============
-     Ported from marblearch-showcase/components/BottomOverlay.tsx — the same
-     trigger, hover swap and card that appear on the other projects. GSAP is
+     The shared aatish.io signature: the same trigger, hover swap and
+     card that appear on the other aatish.io projects. GSAP is
      replaced with CSS transitions; only the parallax needs script.
      ============================================================ -->
 <div class="sig-trigger">
