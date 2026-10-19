@@ -41,6 +41,7 @@
     if (what === "latest") return base + "/releases/latest";
     if (what === "license") return base + "/blob/" + SITE.defaultBranch + "/LICENSE";
     if (what === "privacy") return base + "/blob/" + SITE.defaultBranch + "/PRIVACY.md";
+    if (what === "changelog") return base + "/blob/" + SITE.defaultBranch + "/CHANGELOG.md";
     return base;
   }
 
@@ -115,6 +116,36 @@
       });
   }
 
+  /* Release notes ship in each repo as whatsnew.json (the same file the apps
+     bundle). raw.githubusercontent.com is not part of the API rate limit. */
+  var WHATSNEW_COUNT = 3;
+
+  /** Newest-first release notes for one repo, trimmed to what the page shows. */
+  function fetchWhatsNew(key) {
+    var cached = readCache("whatsnew." + key);
+    if (cached) return Promise.resolve(cached);
+
+    var url = "https://raw.githubusercontent.com/" + SITE.owner + "/" +
+              SITE.apps[key].repo + "/" + SITE.defaultBranch + "/whatsnew.json";
+    return fetch(url)
+      .then(function (res) {
+        if (!res.ok) throw new Error("whatsnew " + res.status);
+        return res.json();
+      })
+      .then(function (json) {
+        var data = (json.versions || []).slice(0, WHATSNEW_COUNT).map(function (v) {
+          return {
+            version: String(v.version || ""),
+            date: v.date ? String(v.date) : "",
+            headline: String(v.headline || ""),
+            highlights: (v.highlights || []).slice(0, 3).map(String)
+          };
+        });
+        writeCache("whatsnew." + key, data);
+        return data;
+      });
+  }
+
   /** Pick the installer a given OS should actually download. */
   function pickAsset(assets, os) {
     function match(re) {
@@ -150,8 +181,19 @@
   }
 
   var releases = {};
+  var whatsNew = {};
 
   Object.keys(SITE.apps).forEach(function (key) {
+    fetchWhatsNew(key)
+      .then(function (data) {
+        whatsNew[key] = data;
+        renderInstall();
+      })
+      .catch(function () {
+        /* No whatsnew.json on the default branch yet, or offline. The
+           section stays hidden rather than showing stale notes. */
+      });
+
     fetchRelease(key)
       .then(function (data) {
         releases[key] = data;
@@ -192,6 +234,43 @@
     var dlBtn = box.querySelector('[data-role="dl-btn"]');
     var dlLabel = box.querySelector('[data-role="dl-label"]');
     var allBtn = box.querySelector('[data-role="all-btn"]');
+    var wnBox = box.querySelector('[data-role="whatsnew"]');
+    var wnList = box.querySelector('[data-role="whatsnew-list"]');
+    var wnLink = box.querySelector('[data-role="changelog-link"]');
+
+    function el(tag, className, text) {
+      var node = document.createElement(tag);
+      if (className) node.className = className;
+      if (text) node.textContent = text;
+      return node;
+    }
+
+    /* Built with textContent only, so nothing from the JSON is parsed as HTML. */
+    function renderWhatsNew(app) {
+      if (!wnBox) return;
+      var entries = whatsNew[app];
+      wnLink.href = resolveLink(app + ":changelog");
+      if (!entries || !entries.length) {
+        wnBox.hidden = true;
+        return;
+      }
+      wnList.textContent = "";
+      entries.forEach(function (entry) {
+        var item = el("li", "whatsnew-item");
+        var meta = el("div", "whatsnew-meta");
+        meta.appendChild(el("span", "whatsnew-version", "v" + entry.version));
+        if (entry.date) meta.appendChild(el("span", "whatsnew-date", entry.date));
+        item.appendChild(meta);
+        if (entry.headline) item.appendChild(el("div", "whatsnew-headline", entry.headline));
+        if (entry.highlights.length) {
+          var points = el("ul", "whatsnew-points");
+          entry.highlights.forEach(function (h) { points.appendChild(el("li", "", h)); });
+          item.appendChild(points);
+        }
+        wnList.appendChild(item);
+      });
+      wnBox.hidden = false;
+    }
 
     var detected = detectOS();
     box.dataset.os = detected;
@@ -229,6 +308,8 @@
       Array.prototype.forEach.call(osPicker.querySelectorAll(".seg-btn"), function (b) {
         b.setAttribute("data-active", b.getAttribute("data-os-value") === os ? "true" : "false");
       });
+
+      renderWhatsNew(app);
     };
 
     appToggle.addEventListener("click", function (e) {
@@ -250,8 +331,8 @@
 
 
   /* ---- aatish.io signature card --------------------------------------
-     Ported from marblearch-showcase/components/BottomOverlay.tsx. The open
-     and close animations are CSS; only the pointer parallax needs script.
+     The shared aatish.io signature, as used on the other projects. The
+     open and close animations are CSS; only the pointer parallax needs script.
      Original used GSAP with a 0.5s power2.out tween — here the easing lives
      on the .sig-bg / .sig-content transition and script only sets the
      offsets. Tilt math and the 10.0 / 2.5 parallax constants are unchanged. */
