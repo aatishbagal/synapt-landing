@@ -746,9 +746,9 @@ section { position: relative; }
 
 /* ============================================================
    AATISH.IO SIGNATURE
-   Ported from marblearch-showcase/components/BottomOverlay.module.scss
-   so the trigger, its hover swap and the card match the other
-   projects exactly. Values are kept as-is rather than remapped
+   The shared aatish.io signature, kept identical to the other
+   aatish.io projects so the trigger, its hover swap and the card
+   match exactly. Values are kept as-is rather than remapped
    onto this site's tokens — it is meant to look the same
    everywhere it appears.
    ============================================================ */

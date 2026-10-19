@@ -331,8 +331,8 @@
 
 
   /* ---- aatish.io signature card --------------------------------------
-     Ported from marblearch-showcase/components/BottomOverlay.tsx. The open
-     and close animations are CSS; only the pointer parallax needs script.
+     The shared aatish.io signature, as used on the other projects. The
+     open and close animations are CSS; only the pointer parallax needs script.
      Original used GSAP with a 0.5s power2.out tween — here the easing lives
      on the .sig-bg / .sig-content transition and script only sets the
      offsets. Tilt math and the 10.0 / 2.5 parallax constants are unchanged. */
