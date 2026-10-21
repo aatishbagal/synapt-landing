@@ -12,12 +12,12 @@
   <a href="./LICENSE"><img alt="License" src="https://img.shields.io/github/license/aatishbagal/synapt-landing?label=license"></a>
 </p>
 
-The website for Synapt and SynaptClip at [synapt.aatish.io](https://synapt.aatish.io). Plain HTML, CSS and JavaScript, with no framework, no build step and no dependencies. Versions, downloads and release notes come live from the app repositories, so the site never needs an edit for a release.
+The website for Synapt and SynaptClip at [synapt.aatish.io](https://synapt.aatish.io). Plain HTML, CSS and JavaScript, with no framework, no build step and no dependencies, plus one small Cloudflare Pages Function that caches release data. Versions, downloads and release notes come live from the app repositories, so the site never needs an edit for a release.
 
 ## Features
 
 - Download picker that detects your platform and links the right installer from the latest GitHub release
-- Version numbers, installer names and file sizes read from the GitHub releases API at page load
+- Version numbers, installer names and file sizes read from the latest GitHub release at page load, through an edge-cached function shared by every visitor
 - What's new section built from each app's `whatsnew.json` on its default branch
 - Recreations of the Synapt overlay and the SynaptClip panel, ported from the apps' own UI code
 - Platform cards for macOS, Windows and Linux
@@ -35,9 +35,19 @@ Then open http://localhost:8000.
 
 Opening `index.html` directly through `file://` mostly works, but the release lookup uses `fetch`, which browsers block on `file://`. Use the server.
 
+A plain static server does not run the release function, so the page falls back to calling the GitHub API directly, which is fine for local work. To run the function too, use Wrangler:
+
+```bash
+npx wrangler pages dev .
+```
+
 ## Deploy it
 
-Cloudflare Pages deploys `main` automatically. Any other static host works too (GitHub Pages, Netlify, S3, nginx): upload the directory as it is. There is no build command; the publish directory is this directory.
+Cloudflare Pages deploys `main` automatically. There is no build command; the publish directory is this directory, and Pages picks up `functions/` on its own.
+
+Optionally, add a `GITHUB_TOKEN` secret to the Pages project (Settings > Variables and Secrets). A fine-grained token with no permissions beyond public read access is enough. It raises the limit the release function runs under from 60 to 5,000 requests an hour. Without it the function still works, and its cache keeps it far below the lower limit.
+
+Any other static host works too (GitHub Pages, Netlify, S3, nginx): upload the directory as it is. The function will not run there, and the page falls back to the GitHub API directly.
 
 Work happens on `dev` (or a feature branch merged into `dev`), and merging `dev` into `main` deploys it.
 
@@ -48,16 +58,21 @@ Work happens on `dev` (or a feature branch merged into `dev`), and merging `dev`
 | `index.html` | The whole page |
 | `synapt.css` | All styling, including the app UI recreations |
 | `synapt.js` | Nav state, release lookup, install picker, What's new, link resolution |
+| `functions/api/release/[repo].js` | Cloudflare Pages Function at `/api/release/<repo>`: the latest release, cached at the edge for 10 minutes, with a week-old copy kept for when GitHub is unavailable |
 | `assets/images/logo/` | Synapt logos, copied from the app repositories |
 | `assets/synapt-logo.svg` | Synapt mark used on the page |
 | `assets/atsh-symbol.svg` | The ATSH mark, the aatish.io signature trigger |
 | `assets/atsh-card-bg.png` | Signature card background (keep the alpha channel) |
+| `assets/og-image.png` | 1200x630 link preview used by the Open Graph and Twitter tags |
+| `assets/favicon-32.png`, `assets/favicon-48.png`, `assets/icon-192.png`, `apple-touch-icon.png` | PNG icons alongside the SVG favicon |
+| `robots.txt`, `sitemap.xml` | Crawler rules and the sitemap |
+| `llms.txt` | Plain-text summary of both apps for AI assistants and answer engines |
 
 ## What you have to maintain
 
 **Nothing, per release.** Versions, installer filenames, download URLs, file sizes and release notes are read from GitHub at page load. Publish a release and the site updates itself.
 
-The one hand-written block is `SITE` at the top of `synapt.js`:
+The one hand-written block is `SITE` at the top of `synapt.js` (the release function repeats only the owner, as `OWNER`):
 
 ```js
 var SITE = {
@@ -85,6 +100,7 @@ Edit `SITE` only if a repo is renamed or moved, or a third app is added.
 Things that do need a manual edit, and only when they actually change:
 
 - **Feature copy**: the two `feat-grid` sections, when a major feature lands or changes.
+- **Search and AI summaries**: `llms.txt`, the JSON-LD block and the Open Graph and Twitter descriptions in `index.html`, alongside the feature copy. None of them carry a version.
 - **Version display**: versions appear in the install box only, and come from the API. Don't reintroduce them next to app names, in the footer, or in section copy.
 - **Platform cards**: the `#platforms` cards, when an OS, architecture or package format changes. Linux and Windows are x86_64 only today; only macOS is universal.
 - **App UI recreations**: the `.app-synapt` and `.app-clip` blocks are hand-ported from `synapt/src/pages/Overlay.tsx` and `synapt-clip/src/components/Panel.tsx`, using each app's own palette. Re-sync them when those components are redesigned.
@@ -92,7 +108,9 @@ Things that do need a manual edit, and only when they actually change:
 
 ## Degradation
 
-If the GitHub API is unreachable or rate limited (60 requests an hour per IP, unauthenticated), version badges render empty and hide themselves, and the download button falls back to the releases page. No stale version is ever shown. Responses are cached in `localStorage` for an hour to keep repeat visits off the API.
+The page asks `/api/release/<repo>` first. That function serves one cached copy of the latest release to every visitor, refreshing it every 10 minutes, so visitors no longer spend their own GitHub API allowance. If GitHub is unavailable when the copy expires, the function serves the last good copy, up to a week old.
+
+If the function is missing or fails, the page calls the GitHub API directly, which allows 60 unauthenticated requests an hour per IP. If that fails too, version badges render empty and hide themselves, and the download button falls back to the releases page. Responses are cached in `localStorage` for an hour to keep repeat visits off both.
 
 ## Hover convention
 

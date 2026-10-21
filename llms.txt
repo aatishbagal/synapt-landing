@@ -1,0 +1,33 @@
+# Synapt
+
+> Synapt and SynaptClip are free, open source desktop apps for macOS, Windows and Linux that move your data between your own devices without a server. Synapt is a hotkey launcher that searches your files, your apps and your paired devices, then transfers files between them directly over the local network. SynaptClip is a clipboard manager with local history, fuzzy search and optional cross-device clip sync through Synapt. Both are end-to-end encrypted, need no account, collect no telemetry, and are licensed under Apache 2.0.
+
+## Synapt
+
+- Summoned with a global hotkey (Ctrl+Space by default) as an always-on-top overlay.
+- Searches local files and apps with typo-tolerant search, and searches the shared folders of a paired device by typing `@device`.
+- Input modes: `/` for folders, `@` for a device, `@settings` for settings, the right arrow key for file actions, and plain arithmetic for a calculator.
+- Pairing uses an X25519 key exchange with a verification code shown on both screens. Transfers are encrypted with ChaCha20-Poly1305 and stay on the local network.
+- Peers can only reach the folders on your explicit shared list.
+
+## SynaptClip
+
+- Captures everything you copy into a local history stored in SQLite.
+- Fuzzy search as you type, forgiving of typos.
+- Auto-categorises links, file paths, code, emails, phone numbers and colours, with pinning and auto-expiry.
+- With Synapt running, sends and receives clips with trusted devices on the local network. Without Synapt it works fully offline.
+
+## Platforms
+
+- macOS: universal build (arm64 and x86_64), .dmg and .app, Developer ID signed and notarised.
+- Windows 10 and 11: x86_64, .msi and .exe installers.
+- Linux: x86_64, .AppImage, .deb and .rpm, on X11 and Wayland (GNOME and wlroots).
+
+## Links
+
+- [Website](https://synapt.aatish.io/): overview, features and downloads
+- [Synapt source and releases](https://github.com/aatishbagal/synapt): the launcher and LAN file transfer app
+- [SynaptClip source and releases](https://github.com/aatishbagal/synapt-clip): the clipboard manager
+- [synapt-core](https://github.com/aatishbagal/synapt-core): the shared library used by both apps
+- [Synapt privacy policy](https://github.com/aatishbagal/synapt/blob/main/PRIVACY.md)
+- [SynaptClip privacy policy](https://github.com/aatishbagal/synapt-clip/blob/main/PRIVACY.md)
