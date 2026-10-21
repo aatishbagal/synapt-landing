@@ -92,27 +92,50 @@
     }
   }
 
-  /** Latest published release for one repo, normalised to {version, assets}. */
+  /** Latest published release for one repo, normalised to {version, assets}.
+      Asks the site's own /api/release function first, which shares one
+      edge-cached copy between all visitors (functions/api/release/[repo].js).
+      Where that is missing, such as a local static server, it falls back to
+      the GitHub API directly. */
   function fetchRelease(key) {
     var cached = readCache(key);
     if (cached) return Promise.resolve(cached);
 
-    var url = "https://api.github.com/repos/" + SITE.owner + "/" +
-              SITE.apps[key].repo + "/releases/latest";
+    var repo = SITE.apps[key].repo;
+    return fetchFromSite(repo)
+      .catch(function () { return fetchFromGitHub(repo); })
+      .then(function (data) {
+        writeCache(key, data);
+        return data;
+      });
+  }
+
+  function fetchFromSite(repo) {
+    return fetch("/api/release/" + repo, { headers: { Accept: "application/json" } })
+      .then(function (res) {
+        if (!res.ok) throw new Error("site " + res.status);
+        return res.json();
+      })
+      .then(function (json) {
+        if (!json || !json.version || !Array.isArray(json.assets)) throw new Error("site payload");
+        return { version: String(json.version), assets: json.assets };
+      });
+  }
+
+  function fetchFromGitHub(repo) {
+    var url = "https://api.github.com/repos/" + SITE.owner + "/" + repo + "/releases/latest";
     return fetch(url, { headers: { Accept: "application/vnd.github+json" } })
       .then(function (res) {
         if (!res.ok) throw new Error("github " + res.status);
         return res.json();
       })
       .then(function (json) {
-        var data = {
+        return {
           version: String(json.tag_name || "").replace(/^v/, ""),
           assets: (json.assets || []).map(function (a) {
             return { name: a.name, url: a.browser_download_url, size: a.size };
           })
         };
-        writeCache(key, data);
-        return data;
       });
   }
 
